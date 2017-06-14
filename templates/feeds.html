@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block header_part %}
+  <script>
+     $( function() {
+    $( "#accordion" ).accordion();
+
+     var obj = JSON.parse('{{ feed|safe }}');
+     console.log(obj);
+     console.log(obj.title);
+     console.log(obj.description);
+     var x = document.getElementsByClassName("title")
+     x[0].innerHTML = obj.title;
+     var y = document.getElementsByClassName("description")
+     y[0].innerHTML = obj.description;
+
+  } );
+  </script>
+  
+  <style>
+  .feedlink{
+  		color:white;
+  		font-size:20px;
+  }
+  .feedlink:hover{
+  		color:yellow;
+  }
+  </style>
+{% endblock header_part %}
+{% block body %}
+<div class="card" style="margin-top: 0px;">
+	<div class="row" style="margin-right: 0%;">
+		<div class="col-md-3" style="margin-right:0%;padding-right: 0%;">
+			<div  style="background-color:#541e5e;height: 100%;padding-top:0px;">
+			
+				<div id="accordion">
+					
+				  	<button type="button" class="btn" style="width:100%;background-color:#533259;" data-toggle="collapse" data-target="#feedurls">
+				  		<strong style="color:white;font-size: 25px;">
+				  			Your Feeds 
+				  			<span style="text-align:right;"class="glyphicon glyphicon-chevron-down"></span>
+				  		</strong>
+				  	</button>
+				  	<div style="margin-top:5%;">
+					    <ul style="padding-left: 10%;padding-bottom: 10%;">
+					    	<li><a href="/feedurls" class="feedlink">times of india</a></li>
+					    	<li><a href="" class="feedlink">google news</a></li>
+					    	<li><a href="" class="feedlink">blah blah</a></li>
+					    	<li><a href="" class="feedlink">blah blah</a></li>
+					    </ul>
+			  		</div>
+			  		<button type="button" style="width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>
+					<div>
+						
+					</div>
+				</div>
+			
+			</div>
+		</div>
+		<div class="col-md-9" style="padding-right: 0%;margin-right:0%">
+			<div class="title">
+
+			</div>
+			<div class="description">
+
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="myModal" role="dialog">
+	    <div class="modal-dialog" style="margin-top:70px;">
+	  		<div class="modal-content" style="text-align:center;">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title"><strong>Enter feed url</strong></h4>
+		        </div>
+	        <div class="modal-body" style="text-align:center;">
+		        <form action="/feeds/" method="post">
+		        	{% csrf_token %}
+		         	<input type="text" style="width:80%;text-align:center;color:black;" placeholder="feedurl"></input><br/><br/>
+		         	<button style="background-color:#533259;" class="btn">
+		         		<strong style="color:white;">Add to my feeds</strong>
+		         	</button>
+		         	<button type="button" class="btn" style="background-color:#533259;" data-dismiss="modal"><strong style="color:white;">Close</strong></button>
+		    	</form>
+	        </div>
+		</div>
+	</div>
+</div>
+{% endblock body %}

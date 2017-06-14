@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block django_loading %}
+{% load static %}
+{% endblock django_loading %}
+{% block header_part %}
+<style>
+.facebook {
+	width:70%;
+	border-radius:0px;
+    background-color: #3b5998;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAt1BMVEU7WZg7WZg7WZg7WZg7WZg7WZg7WZg7WZg7WZg7WZg7WZg7WZg7WZg8Wpg7WZg7WZg7WZj///87WZhieq3+/v/y9PintdFedqrI0OLz9flqgbFSbaTm6vLQ1+bp7fSbqso8Wpi8xtyZqMn4+fv9/f5Vb6aSo8a+yN16jrlCX5zf5O7j5/BRbKQ9W5mHmcBUbqVDYJzFzuCruNOTo8Z5jrlheaxIZJ/b4OzCzN+qt9Lp7PPT2ujEzeBXeFKQAAAAEXRSTlMUAO6ZmhXZne3vF92f8OzaE+AmR/YAAADGSURBVHhe7dM3jsMwFAbhR0pyDvuoLOecc9h4/3Mt3BAuDAPiD6jiHODrhgQ5FWVYs1ETRCUFVPfIVVBlamFAlRRYoYAF4kHSnXAQhv3N718nN5D1+Lk4J7CLAkaA4YgZAsaMAf4UBBLGgFkAAnMGgQXrwmiZ+Y9WeYC1Bn62Ri+kGtibvcC6AwocUUAVDViA33RCgTMKXFDgigI3FLiDQKpA4BMFvlDg+zVgb7SABSxgAYkBklwMcInaCFAiEp4jTQHpfIh/6JofXDWboT0AAAAASUVORK5CYII=);
+    color: white;
+    background-size: 25px, Auto;
+}
+.google {
+	padding-left:0px;
+	border-radius:0px;
+	width:70%;
+	background-color:#4885ed;
+	background-repeat: no-repeat;
+    background-position: left;
+    background-image: url("{% static 'google_logo.png' %}");
+    color: white;
+    background-size: 33px, 30px;
+}
+
+.twitter {
+	padding-left:0px;
+	border-radius:0px;
+	width:70%;
+    background-color: #0084b4;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-image: url("{% static 'twitter_logo.png' %}");
+    color: white;
+    background-size: 34px, 20px;
+}
+</style>
+{% endblock header_part %}
+{% block body %}
+<div style="text-align:left;">
+<div class="card" style="height:100%" >
+	<div class="row">
+
+		<div class="col-md-5" style="margin-top:60px; padding-left:5%;">
+	  		<strong style="font-family: Carter One;font-size: 20px;">Choose your account:</strong><br/><br/>
+	  		<a href="/feeds"><button onClick="doFacebookLogin()" class='btn facebook'><strong style="color:white;">Continue with Facebook</strong></button></a><br/><br/>
+			<button onClick="doGoogleLogin()" class='btn google'><strong style="color:white;">Continue with Google</strong></button><br/><br/>
+                            
+            <button onClick="doTwitterLogin()" class='btn twitter'><strong style="color:white;">Continue with Twitter</strong></button><br/><br/>
+                       
+	  		
+		</div>
+	</div>
+</div>
+
+{% endblock %}

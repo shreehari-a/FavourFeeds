@@ -1,0 +1,55 @@
+<html>
+{% block django_loading %}
+{% endblock django_loading %}
+<head>
+		<title>FavourFeeds.com</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!--for domainname font-->
+		<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Carter+One" />
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.css"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<!--<link rel="stylesheet" href="https://colorlib.com/polygon/build/css/custom.min.css">
+		<link rel="stylesheet" href="https://colorlib.com/polygon/vendors/iCheck/skins/flat/green.css">
+		<link rel="stylesheet" href="https://colorlib.com/polygon/vendors/jqvmap/dist/jqvmap.min.css">
+		<link rel="stylesheet" href="https://colorlib.com/polygon/vendors/bootstrap-daterangepicker/daterangepicker.css">-->
+		<style>
+			.nav_link{
+				color:white;
+				font-weight: 900px;
+			}
+		</style>
+		{% block header_part %}
+		{% endblock header_part %}
+</head>
+<body>
+<div class="container" style="margin-left:7%;">
+	<nav class="navbar" style="background-color:#3d1644;margin-bottom: 0px;border-radius: 0px;">
+		<div class="container-fluid">
+			
+			<div class="navbar-header" >
+				<a class="navbar-brand" href="/" style="color:#f2e8f4;font-size:35px;font-family: Carter One;">FavourFeeds.com</a>
+			</div>
+			{% if session %}
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right" style="background-color:#3d1644; ">
+					<li><a class="nav_link" href="#">Welcome Shreehari</a></li>
+					<li><a class="nav_link" href="/">Logout</a></li>
+				</ul>
+			</div>
+			{% endif %}
+		</div>
+		
+
+	</nav>
+	{% block body %}
+	{% endblock body %}
+</div>
+	
+</body>
+</html>
