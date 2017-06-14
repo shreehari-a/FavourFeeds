@@ -25,7 +25,7 @@ SECRET_KEY = '5(whsx145zq7-9$l8dns0=yplej1ir7fcu#q!a+haba##+^or^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 # Application definition
 
@@ -38,6 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rss',
+
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.twitter',
+
+
+
 ]
 
 MIDDLEWARE = [
@@ -127,7 +140,53 @@ STATICFILES_DIRS = (
 # print "base dir path", BASE_DIR
 # print "static root", STATIC_ROOT
 
+SITE_ID = 2
 
+# http://django-allauth.readthedocs.io/en/latest/providers.html#facebook
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'METHOD': 'js_sdk',
+        'SCOPE': ['email', 'public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': ''},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time',
+        ],
+        'EXCHANGE_TOKEN': True,
+        #'LOCALE_FUNC': 'http://127.0.0.1:8000',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4',
 
+    },
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
 
+}
 
+#http://django-allauth.readthedocs.io/en/latest/providers.html(longlive exchange token)
+EXCHANGE_TOKEN = True
+
+LOGIN_REDIRECT_URL = "/feeds"
+
+#ACCOUNT_LOGOUT_REDIRECT_URL ="/"
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+
+ACCOUNT_LOGOUT_REDIRECT_URL ="/"

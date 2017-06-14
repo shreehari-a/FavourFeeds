@@ -1,19 +1,33 @@
 {% extends 'base.html' %}
 {% block header_part %}
   <script>
-     $( function() {
-    $( "#accordion" ).accordion();
+     $(function() {
+    	$( "#accordion" ).accordion();
 
-     var obj = JSON.parse('{{ feed|safe }}');
-     console.log(obj);
-     console.log(obj.title);
-     console.log(obj.description);
-     var x = document.getElementsByClassName("title")
-     x[0].innerHTML = obj.title;
-     var y = document.getElementsByClassName("description")
-     y[0].innerHTML = obj.description;
+     // var obj = JSON.parse('{{ feed|safe }}');
+     // console.log(obj);
+     // console.log(obj.title);
+     // console.log(obj.description);
+     // var x = document.getElementsByClassName("title")
+     // x[0].innerHTML = obj.title;
+     // var y = document.getElementsByClassName("description")
+     // y[0].innerHTML = obj.description;
 
-  } );
+     // document.getElementById('add_new_feeds').onclick = function(){
+     // 	var form = document.getElementById('new_feed_form');
+     // 	var data = new FormData(form);
+     // 	console.log(data)
+     	// var link = document.getElementById('new_feed_form').serialize();
+     	// console.log(link)
+     	$('#add_new_feeds').click(function(){
+     		console.log("clicked");
+     		// var link = $('#feedurls').val();
+     		// console.log(link);
+     	var inputs = $('#new_feed_form').serialize();
+     	console.log(inputs);
+     	});
+     
+  });
   </script>
   
   <style>
@@ -57,6 +71,7 @@
 			</div>
 		</div>
 		<div class="col-md-9" style="padding-right: 0%;margin-right:0%">
+
 			<div class="title">
 
 			</div>
@@ -73,10 +88,10 @@
 		          <h4 class="modal-title"><strong>Enter feed url</strong></h4>
 		        </div>
 	        <div class="modal-body" style="text-align:center;">
-		        <form action="/feeds/" method="post">
-		        	{% csrf_token %}
-		         	<input type="text" style="width:80%;text-align:center;color:black;" placeholder="feedurl"></input><br/><br/>
-		         	<button style="background-color:#533259;" class="btn">
+		        <form id="new_feed_form" action="#" method="var inputs = $('#'+formId).serializeArray();">
+		        	<!-- {% csrf_token %} -->
+		         	<input id="feed_url" type="text" style="width:80%;text-align:center;color:black;" placeholder="feedurl"></input><br/><br/>
+		         	<button id="add_new_feeds" style="background-color:#533259;" class="btn">
 		         		<strong style="color:white;">Add to my feeds</strong>
 		         	</button>
 		         	<button type="button" class="btn" style="background-color:#533259;" data-dismiss="modal"><strong style="color:white;">Close</strong></button>

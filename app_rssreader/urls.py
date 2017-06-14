@@ -16,12 +16,18 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rss import views
+from django.contrib import admin
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^admin/', admin.site.urls),
 	url(r'^$',views.login),
     url(r'^feeds/$', views.feeds),
     url(r'^feedurls/$',views.feedurls),
+    url(r'^accounts/social/login/error/$', views.login_cancelled),
+    
+    url(r'^accounts/', include('allauth.urls')),
+
             ]
 

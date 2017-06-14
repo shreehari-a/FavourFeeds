@@ -23,23 +23,39 @@
 				color:white;
 				font-weight: 900px;
 			}
+			#navigation-fixed{
+			left:8.15%;
+			right:8.8%;
+			position:fixed;
+			
+			background-color:#3d1644;
+			margin-bottom: 0px;
+			border-radius: 0px;
+		}
+		body{
+			margin-top:50px;
+		}
 		</style>
 		{% block header_part %}
 		{% endblock header_part %}
 </head>
-<body>
+
 <div class="container" style="margin-left:7%;">
-	<nav class="navbar" style="background-color:#3d1644;margin-bottom: 0px;border-radius: 0px;">
+	<nav class="navbar navbar-fixed-top" id="navigation-fixed">
 		<div class="container-fluid">
 			
 			<div class="navbar-header" >
 				<a class="navbar-brand" href="/" style="color:#f2e8f4;font-size:35px;font-family: Carter One;">FavourFeeds.com</a>
 			</div>
-			{% if session %}
+			{% if request.user.is_authenticated %}
+		
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right" style="background-color:#3d1644; ">
-					<li><a class="nav_link" href="#">Welcome Shreehari</a></li>
-					<li><a class="nav_link" href="/">Logout</a></li>
+					<li>
+                  	<a href="#" id="profile_pic_link" style="text-align:center;padding:10px;"><img style="width:30px;height:auto;" src="{% if user.socialaccount_set.all.0.get_avatar_url %} {{ user.socialaccount_set.all.0.get_avatar_url }}{% endif %}" onerror="standby()" id="profile_pic"/></a>
+                    </li> 
+					<li><a class="nav_link" href="#">Welcome {{request.user.first_name}}</a></li>
+					<li><a class="nav_link" href="/accounts/logout/">Logout</a></li>
 				</ul>
 			</div>
 			{% endif %}
@@ -47,9 +63,11 @@
 		
 
 	</nav>
+	<body>
 	{% block body %}
 	{% endblock body %}
+	</body>
 </div>
 	
-</body>
+
 </html>
