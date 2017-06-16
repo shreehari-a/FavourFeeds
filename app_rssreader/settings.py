@@ -142,7 +142,7 @@ STATICFILES_DIRS = (
 
 SITE_ID = 2
 
-# http://django-allauth.readthedocs.io/en/latest/providers.html#facebook
+# http://django-allauth.readthedocs.io/en/latest/providers.html#facebook,google
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
         'METHOD': 'js_sdk',

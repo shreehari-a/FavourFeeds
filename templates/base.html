@@ -35,6 +35,14 @@
 		body{
 			margin-top:50px;
 		}
+		.navbar-brand{
+			color:#f2e8f4;
+			font-size:35px;
+			font-family: Carter One;
+		}
+		.navbar-brand:hover{
+			color:yellow;
+		}
 		</style>
 		{% block header_part %}
 		{% endblock header_part %}
@@ -45,7 +53,7 @@
 		<div class="container-fluid">
 			
 			<div class="navbar-header" >
-				<a class="navbar-brand" href="/" style="color:#f2e8f4;font-size:35px;font-family: Carter One;">FavourFeeds.com</a>
+				<a class="navbar-brand" href="/" >FavourFeeds.com</a>
 			</div>
 			{% if request.user.is_authenticated %}
 		

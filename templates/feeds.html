@@ -3,6 +3,7 @@
   <script>
      $(function() {
     	$( "#accordion" ).accordion();
+    	// $("#accordion").accordion({ header: "button", collapsible: true, active: true });
 
      // var obj = JSON.parse('{{ feed|safe }}');
      // console.log(obj);
@@ -12,23 +13,51 @@
      // x[0].innerHTML = obj.title;
      // var y = document.getElementsByClassName("description")
      // y[0].innerHTML = obj.description;
+     $('.close').click(function(){
+     	if(!confirm('Are you sure? Feed will be removed!')){
+     		return false;
+     	}
+     	else{
+     		//remove feed_url from users list('from linking table User_FeedWebsite')
+     	}
+     });
+     $('.feedlink').click(function(){
+     		console.log('parse feed for link from database');
+     		var link = $(this).attr('data');
+     		console.log(link);
 
-     // document.getElementById('add_new_feeds').onclick = function(){
-     // 	var form = document.getElementById('new_feed_form');
-     // 	var data = new FormData(form);
-     // 	console.log(data)
-     	// var link = document.getElementById('new_feed_form').serialize();
-     	// console.log(link)
-     	$('#add_new_feeds').click(function(){
-     		console.log("clicked");
-     		// var link = $('#feedurls').val();
-     		// console.log(link);
-     	var inputs = $('#new_feed_form').serialize();
-     	console.log(inputs);
-     	});
-     
+     		//do ajax
+     		//parse new feeds
+
+     		//display them -  innerHTML
+
+     })
+
+     $('#add_new_feeds').click(function(e){
+     		e.preventDefault(e);
+     		console.log('hello');
+			var input_url = $('#feedurls').serialize();
+     		console.log(input_url);
+     		//check whether its a feed url?
+     		//if so then only do ajax
+     		//else display the error saying that given url is not feed url
+
+     		$.ajax({
+                url: '/feedurls/',
+                type: 'POST',
+                
+                data: input_url,
+                success: function(data){
+                     console.log(data)
+                     //add title in the begining
+                     //display feeds    
+                }
+            });
+		});	
+    
   });
   </script>
+  
   
   <style>
   .feedlink{
@@ -38,28 +67,74 @@
   .feedlink:hover{
   		color:yellow;
   }
+  .close{
+  		color: white;
+  		opacity: 1 !important;
+  		background-color: white;
+  		padding:3px !important;
+
+  }
+  .close:hover{
+  	 color: red;
+  }
   </style>
 {% endblock header_part %}
 {% block body %}
-<div class="card" style="margin-top: 0px;">
+
+<div class="card" style="margin-top: 0px;min-height: 100%;">
 	<div class="row" style="margin-right: 0%;">
 		<div class="col-md-3" style="margin-right:0%;padding-right: 0%;">
-			<div  style="background-color:#541e5e;height: 100%;padding-top:0px;">
+			<div  style="background-color:#541e5e;height:100%;padding-top:0px;">
 			
 				<div id="accordion">
 					
-				  	<button type="button" class="btn" style="width:100%;background-color:#533259;" data-toggle="collapse" data-target="#feedurls">
+				  	<button type="button" class="btn" data-target="#feeds_title" style="width:100%;background-color:#533259;" data-toggle="collapse" data-target="#feedurls">
 				  		<strong style="color:white;font-size: 25px;">
 				  			Your Feeds 
-				  			<span style="text-align:right;"class="glyphicon glyphicon-chevron-down"></span>
+				  			<span class="glyphicon glyphicon-chevron-down"></span>
 				  		</strong>
 				  	</button>
 				  	<div style="margin-top:5%;">
 					    <ul style="padding-left: 10%;padding-bottom: 10%;">
-					    	<li><a href="/feedurls" class="feedlink">times of india</a></li>
-					    	<li><a href="" class="feedlink">google news</a></li>
-					    	<li><a href="" class="feedlink">blah blah</a></li>
-					    	<li><a href="" class="feedlink">blah blah</a></li>
+					    	<li><a href="#" class="feedlink" data="http://shreehari.me">times of india</a>
+					    		<button type="button" class="close" >
+					    			&times;
+					    		</button>
+					    	</li>
+					    	
+					    	<li><a href="#" class="feedlink">google news</a>
+					    		
+					    		<button type="button" class="close" >
+					    			&times;
+					    		</button>
+					    		
+					    	</li>
+
+					    	<li><a href="#" class="feedlink">This is the third feed</a>
+					    		<button type="button" class="close" >
+					    			&times;
+					    		</button>
+					    	</li>
+					    	<li><a href="#" class="feedlink">blah blah</a>
+					    		<button type="button" class="close">
+					    			&times;
+					    		</button>
+					    	</li>
+					    	<li><a href="#" class="feedlink">blah blah</a>
+								<button type="button" class="close" >
+					    			&times;
+					    		</button>
+					    	</li>
+					    	<li><a href="#" class="feedlink">blah blah</a>
+					    		<button type="button" class="close" >
+					    			&times;
+					    		</button>
+					    	</li>
+					    	<li><a href="" class="feedlink">blah blah</a>
+					    		<button type="button" class="close" >
+					    			&times;
+					    		</button>
+					    	</li>
 					    </ul>
 			  		</div>
 			  		<button type="button" style="width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>
@@ -71,13 +146,14 @@
 			</div>
 		</div>
 		<div class="col-md-9" style="padding-right: 0%;margin-right:0%">
-
+		<div id="feed_details">
 			<div class="title">
 
 			</div>
 			<div class="description">
 
 			</div>
+		</div>
 		</div>
 	</div>
 	<div class="modal fade" id="myModal" role="dialog">
@@ -88,16 +164,24 @@
 		          <h4 class="modal-title"><strong>Enter feed url</strong></h4>
 		        </div>
 	        <div class="modal-body" style="text-align:center;">
-		        <form id="new_feed_form" action="#" method="var inputs = $('#'+formId).serializeArray();">
-		        	<!-- {% csrf_token %} -->
-		         	<input id="feed_url" type="text" style="width:80%;text-align:center;color:black;" placeholder="feedurl"></input><br/><br/>
-		         	<button id="add_new_feeds" style="background-color:#533259;" class="btn">
-		         		<strong style="color:white;">Add to my feeds</strong>
-		         	</button>
-		         	<button type="button" class="btn" style="background-color:#533259;" data-dismiss="modal"><strong style="color:white;">Close</strong></button>
-		    	</form>
-	        </div>
+	        	<form id="feedurls" method="POST" enctype="multipart/form-data">
+	        		<!-- {% csrf_token %} -->
+		      		<input id="feed_url" name="url" value="" type="text" style="width:80%;text-align:center;color:black;" placeholder="feed url"></input>
+		      		{% csrf_token %}
+					<br/><br/>
+					<button type="submit" id="add_new_feeds" style="background-color:#533259;" 	class="btn">
+					<strong style="color:white;">Add to my feeds</strong>
+					</button>
+
+				
+				
+					<button type="button" class="btn" style="background-color:#533259;" data-dismiss="modal">
+						<strong style="color:white;">Close</strong>
+					</button>
+				</form>
+		    </div>
 		</div>
 	</div>
 </div>
+
 {% endblock body %}
