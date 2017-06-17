@@ -6,7 +6,7 @@
   <script>
      $(function() {
     	//$( "#accordion" ).accordion();
-    	$("#accordion").accordion({ header: "button", collapsible: true, active: true });
+    	$("#accordion").accordion({ header: "button", collapsible: true, active: false });
     	
      // var obj = JSON.parse('{{ feed|safe }}');
      // console.log(obj);
@@ -25,6 +25,8 @@
      	}
      	else{
      		//remove feed_url from users list('from linking table User_FeedWebsite')
+     		console.log('remove feeds');
+     		//once removed delete the div item
      	}
      });
      $('.feedlink').click(function(){
@@ -43,7 +45,7 @@
      		//display them -  innerHTML
 
      })
-
+     //Add New Feed
      $('#add_new_feeds').click(function(e){
      		e.preventDefault(e);
      		console.log('hello');
@@ -63,7 +65,7 @@
 	  							<strong>Url does not have any feeds</strong> </div>');
 	                     	$("#error_url").css("display", "block");
 	                     }
-	                     
+
 	                     else{
 	                        console.log('coolstuff.I ll get you the things bob');
 	                        console.log(data);
@@ -75,20 +77,47 @@
 	            });
 	     	
 		});	
+     	//display_onload
+     	var data = JSON.parse('{{ website|safe }}');
+     	
+       	for(item=0;item<2;item++){
+       		title = data[item][0].website_title;
+       		url = data[item][0].website_feed_url;
+       		
+
+       		$("#website_titles").append('<li><a href="#" class="feedlink" data="'+url+'">'+title+'</a><button type="button" class="close" data="'+url+'">&times;</button></li>');
+       	}
+       	var desc = JSON.stringify('{{ data|safe }}');
+       	var desc_string = JSON.parse(desc);
+       	var lol = JSON.parse(desc_string);
+       	console.log(desc);
+       	console.log(desc_string);
+
+       	
+
     
   });
   </script>
   <script>
-  	$(document).ready(function(){
+
+ //loading gif
+$(document).ready(function(){
     $(document).ajaxStart(function(){
         $("#loadingmessage").css("display", "block");
     });
     $(document).ajaxComplete(function(){
         $("#loadingmessage").css("display", "none");
     });
-    // $("").click(function(){
-    //     $("#txt").load("demo_ajax_load.asp");
-    // });
+    $('.close').click(function(){
+     	if(!confirm('Are you sure? Feed will be removed!')){
+     		return false;
+     	}
+     	else{
+     		//remove feed_url from users list('from linking table User_FeedWebsite')
+     		console.log('remove feeds');
+     		//once removed delete the div item
+     	}
+     });
 });
   </script>
   
@@ -117,7 +146,7 @@
 <!-- <div class="card" style="margin-top: 0px;min-height: 100%;"> -->
 	<div class="row" style="margin-right: 0%;">
 		<div class="col-md-3" style="margin-right:0%;padding-right: 0%;">
-			<div class="card" style="height:100%; background-color:#541e5e; ">
+			<div class="card" style="height:91%; background-color:#541e5e; ">
 			<div  style="background-color:#541e5e;height:;padding-top:0px;">
 			
 				<div id="accordion">
@@ -130,52 +159,18 @@
 				  	</button>
 				  	<div style="margin-top:5%;">
 					    <ul style="padding-left: 10%;padding-bottom: 10%;">
-					    	<li><a href="#" class="feedlink" data="http://feeds.reuters.com/reuters/INtopNews?format=xml">times of india</a>
-					    		<button type="button" class="close" >
-					    			&times;
-					    		</button>
-					    	</li>
+					    <div id="website_titles">
 					    	
-					    	<li><a href="#" class="feedlink">google news</a>
-					    		
-					    		<button type="button" class="close" >
-					    			&times;
-					    		</button>
-					    		
-					    	</li>
-
-					    	<li><a href="#" class="feedlink">This is the third feed</a>
-					    		<button type="button" class="close" >
-					    			&times;
-					    		</button>
-					    	</li>
-					    	<li><a href="#" class="feedlink">blah blah</a>
-					    		<button type="button" class="close">
-					    			&times;
-					    		</button>
-					    	</li>
-					    	<li><a href="#" class="feedlink">blah blah</a>
-								<button type="button" class="close" >
-					    			&times;
-					    		</button>
-					    	</li>
-					    	<li><a href="#" class="feedlink">blah blah</a>
-					    		<button type="button" class="close" >
-					    			&times;
-					    		</button>
-					    	</li>
-					    	<li><a href="" class="feedlink">blah blah</a>
-					    		<button type="button" class="close" >
-					    			&times;
-					    		</button>
-					    	</li>
+					    </div>
 					    </ul>
-			  		</div>
+					</div>
+			  	</div>
+			  
 			  </div>
-			  </div>
-			  	<button type="button" style="border-radius:0px;width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>	
-			
+			  	
 			</div>
+			<button type="button" style="border-radius:0px;width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>	
+			
 		</div>
 		<div class="col-md-9" style="margin-left:0%;padding-left:0%;padding-right: 0%;margin-right:0%">
 		<div id="feed_details">
@@ -184,7 +179,7 @@
 				This is awesome
 			</div>
 			<div class="description">
-			description goes here
+				
 			</div>
 		</div>
 		</div>

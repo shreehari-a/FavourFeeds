@@ -8,7 +8,7 @@ from rss.models import FeedWebsite, User_FeedWebsite, FeedDetail
 from django.contrib.auth.models import User
 from django.urls import reverse
 import json
-from feedfinder import getFeeds
+import feedfinder
 from feedly import feed_parser
 
 def feed_id_identifier(url):
@@ -32,27 +32,54 @@ def checking_subscription(user_id,feed_id):
             return "yes"
     return "no"
 
+
 def get_feeds(feed_id):
-    obj = FeedDetail.objects.filter()
+    obj = FeedDetail.objects.filter().order_by('published_on')
     data = {}
     all_feeds = []
     for item in obj:
         if feed_id == item.feed_id_id:
             data['title'] = item.title
             data['description'] = item.description
+            data['feed_link'] = item.feed_link
             text = str(localtime(item.published_on))
             data['published_on'] = text
         all_feeds.append(data)
     return all_feeds
 
+def check_subscribed_feed_ids(user):
+    obj = User_FeedWebsite.objects.filter()
+    feed_ids = []
+    for item in obj:
+        if user == item.user_id:
+            feed_ids.append(item.feed_id_id)
+    return feed_ids
+
+def check_subscribed_website(feed_id):
+    obj = FeedWebsite.objects.filter()
+    data = {}
+    website_data=[]
+    for item in obj:
+        if feed_id == item.feed_id:
+            data['website_feed_url'] = item.website_feed_url
+            data['website_title'] = item.website_title
+            data['website_url'] = item.website_url
+        website_data.append(data)
+    return website_data
+
+
 def login(request):
     if request.user.is_authenticated:
+        user = request.user
+        feed_ids = check_subscribed_feed_ids(user)
         
-        #check who is the user
-        #retrive all the data for the user, that is (User.user_id = User_FeedWebsite.user_id & FeedWebsite.feed_id = User_FeedWebsite.feed_id)
-        #website_title
-        #
-        return render(request,'feeds.html')
+        website_data = []
+        for feed_id in feed_ids:
+            website_data.append(check_subscribed_website(feed_id))
+        website_data = json.dumps(website_data)
+        first_fly_data = json.dumps(get_feeds(feed_ids[0]))
+
+        return render(request,'feeds.html',{ 'data': first_fly_data,'website':website_data})
 
     return render(request,'login.html')
 
@@ -73,28 +100,6 @@ def feeds(request):
     #for all the urls in feedurls refresh the database with newdata:
     #return done
 
-#def display_feeds(request):
-    #get the url 
-    #check the database for feeds
-    #return the feeds for the given url
-#identify feed_id
-
-
-# def user_id_identifier(user):
-#     print "current-user", user
-#     obj = User.objects.filter()
-#     for item in obj:
-#         if str(user) == str(item.username):
-#             user_id = str(item.id)
-#             return user_id
-#         else:
-#             user_id = 0
-#     return user_id
-
-
-
-
-
 def save_parsed_data(data, user):
     website_title = data.website_title()
     website_feed_url = data.website_feed_link()
@@ -107,7 +112,8 @@ def save_parsed_data(data, user):
     FeedWebsite_Obj.website_title = website_title
     FeedWebsite_Obj.website_feed_url = website_feed_url
     FeedWebsite_Obj.website_url = website_url
-    FeedWebsite_Obj.last_updated_on = last_updated_on
+    if last_updated_on:
+        FeedWebsite_Obj.last_updated_on = last_updated_on
     
     FeedWebsite_Obj.save()
     f_id = FeedWebsite_Obj.feed_id
@@ -117,7 +123,8 @@ def save_parsed_data(data, user):
 
         FeedDetail_Obj = FeedDetail(feed_id=FeedWebsite_Obj)
         FeedDetail_Obj.title = key
-        FeedDetail_Obj.published_on = values[0]
+        if values[0]:
+            FeedDetail_Obj.published_on = values[0]
         FeedDetail_Obj.feed_link = values[1]
         FeedDetail_Obj.description = values[2]
         FeedDetail_Obj.save()
@@ -136,7 +143,7 @@ def add_subscription(request):
             url_data = request.POST.get('url')
             print url_data
             #checking whether the link has feed content
-            is_feed = getFeeds(url_data)
+            is_feed = feedfinder.isFeed(url_data)
             if not is_feed:
                 return HttpResponse('None')
             

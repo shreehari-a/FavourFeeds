@@ -15,7 +15,7 @@ class FeedWebsite(models.Model):
 	website_feed_url = models.URLField(null=True, max_length=300)
 	website_url = models.URLField(null=True, max_length=300)
 	website_title = models.TextField(null=True)
-   	last_updated_on = models.DateTimeField(null=True, auto_now_add=False)
+   	last_updated_on = models.DateTimeField(null=True, blank=True, auto_now_add=False, default=None)
 
    	def __unicode__(self):
    		return str(self.feed_id) +' - '+str(self.website_title)
@@ -25,7 +25,7 @@ class FeedDetail(models.Model):
 	title = models.TextField(null=True)
 	description = models.TextField(null=True)
 	feed_link = models.URLField(null=True, max_length=300)
-	published_on = models.DateTimeField(null=True, auto_now_add=False)
+	published_on = models.DateTimeField(null=True, blank=True, auto_now_add=False, default=None)
 
 	def __unicode__(self):
 		return str(self.feed_id)+' - '+str(self.feed_link)
