@@ -29,10 +29,15 @@
      });
      $('.feedlink').click(function(){
      		console.log('parse feed for link from database');
-     		var link = $(this).attr('data');
+     		var link = $(this).attr('data')
+     		url = JSON.stringify(link)
      		console.log(link);
 
      		//do ajax
+     		$.get('/feed_details/', { "url" : url }, function(data){
+                        console.log("yes got the info bro!");
+                        console.log(data);
+                        });
      		//parse new feeds
 
      		//display them -  innerHTML
@@ -44,14 +49,7 @@
      		console.log('hello');
 			var input_url = $('#feedurls').serialize();
      		console.log(input_url);
-     		// isUrlValid = function(url) {
-       //      return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(input_url);
-       //  	}
-     		// //check whether its a feed url?
-     		// //if so then only do ajax
-     		// //else display the error saying that given url is not feed url
-     		// console.log(isUrlValid())
-	     	// if(!isUrlValid){
+     		
 	     		$('#error_url').css("display","none");
 	     		$.ajax({
 	                url: '/add_subscription/',
@@ -65,18 +63,17 @@
 	  							<strong>Url does not have any feeds</strong> </div>');
 	                     	$("#error_url").css("display", "block");
 	                     }
+	                     
 	                     else{
 	                        console.log('coolstuff.I ll get you the things bob');
+	                        console.log(data);
 	                        $('#closemodal').click();
 	                     }	
 	                     //add title in the begining
 	                     //display feeds    
 	                }
 	            });
-	     	// }
-	     	// else{
-	     	// 	$('#error_url').css("display","block");
-	     	// }
+	     	
 		});	
     
   });
@@ -133,7 +130,7 @@
 				  	</button>
 				  	<div style="margin-top:5%;">
 					    <ul style="padding-left: 10%;padding-bottom: 10%;">
-					    	<li><a href="#" class="feedlink" data="http://shreehari.me">times of india</a>
+					    	<li><a href="#" class="feedlink" data="http://feeds.reuters.com/reuters/INtopNews?format=xml">times of india</a>
 					    		<button type="button" class="close" >
 					    			&times;
 					    		</button>

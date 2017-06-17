@@ -25,7 +25,7 @@ urlpatterns = [
 	url(r'^$',views.login),
     url(r'^feeds/$', views.feeds),
     url(r'^add_subscription/$',views.add_subscription),
-    
+    url(r'^feed_details/$',views.feed_details),
     url(r'^accounts/social/login/error/$', views.login_cancelled),
     
     url(r'^accounts/', include('allauth.urls')),
