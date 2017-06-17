@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^$',views.login),
     url(r'^feeds/$', views.feeds),
-    url(r'^feedurls/$',views.feedurls),
+    url(r'^add_subscription/$',views.add_subscription),
+    
     url(r'^accounts/social/login/error/$', views.login_cancelled),
     
     url(r'^accounts/', include('allauth.urls')),

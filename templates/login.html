@@ -53,9 +53,9 @@ window.ununload=function(){
 		<div class="col-md-5" style="margin-top:60px; padding-left:5%;">
 	  		<strong style="font-family: Carter One;font-size: 20px;">Choose your account:</strong><br/><br/>
 
-	  		<a href='{% provider_login_url "facebook" method="js_sdk" next="/feeds"%}' ><button class='btn facebook'><strong style="color:white;">Continue with Facebook</strong></button></a><br/><br/>
+	  		<a href='{% provider_login_url "facebook" method="js_sdk" next="/"%}' ><button class='btn facebook'><strong style="color:white;">Continue with Facebook</strong></button></a><br/><br/>
 
-			<a href='{% provider_login_url "google" next="/feeds"%}'><button class='btn google'><strong style="color:white;">Continue with Google</strong></button></a><br/><br/>
+			<a href='{% provider_login_url "google" next="/"%}'><button class='btn google'><strong style="color:white;">Continue with Google</strong></button></a><br/><br/>
                             
             <a href=""><button onClick="doTwitterLogin()" class='btn twitter'><strong style="color:white;">Continue with Twitter</strong></button></a><br/><br/>
         </div>

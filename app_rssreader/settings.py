@@ -183,7 +183,7 @@ SOCIALACCOUNT_PROVIDERS = {
 #http://django-allauth.readthedocs.io/en/latest/providers.html(longlive exchange token)
 EXCHANGE_TOKEN = True
 
-LOGIN_REDIRECT_URL = "/feeds"
+LOGIN_REDIRECT_URL = "/"
 
 #ACCOUNT_LOGOUT_REDIRECT_URL ="/"
 ACCOUNT_LOGOUT_ON_GET = True

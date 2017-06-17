@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
+{% block django_loading %}
+	{% load static %}
+{% endblock django_loading %}
 {% block header_part %}
   <script>
      $(function() {
-    	$( "#accordion" ).accordion();
-    	// $("#accordion").accordion({ header: "button", collapsible: true, active: true });
-
+    	//$( "#accordion" ).accordion();
+    	$("#accordion").accordion({ header: "button", collapsible: true, active: true });
+    	
      // var obj = JSON.parse('{{ feed|safe }}');
      // console.log(obj);
      // console.log(obj.title);
@@ -13,6 +16,9 @@
      // x[0].innerHTML = obj.title;
      // var y = document.getElementsByClassName("description")
      // y[0].innerHTML = obj.description;
+     $('#closemodal').click(function(){
+     	$("#error_url").css("display", "none");
+     });
      $('.close').click(function(){
      	if(!confirm('Are you sure? Feed will be removed!')){
      		return false;
@@ -38,26 +44,56 @@
      		console.log('hello');
 			var input_url = $('#feedurls').serialize();
      		console.log(input_url);
-     		//check whether its a feed url?
-     		//if so then only do ajax
-     		//else display the error saying that given url is not feed url
-
-     		$.ajax({
-                url: '/feedurls/',
-                type: 'POST',
-                
-                data: input_url,
-                success: function(data){
-                     console.log(data)
-                     //add title in the begining
-                     //display feeds    
-                }
-            });
+     		// isUrlValid = function(url) {
+       //      return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(input_url);
+       //  	}
+     		// //check whether its a feed url?
+     		// //if so then only do ajax
+     		// //else display the error saying that given url is not feed url
+     		// console.log(isUrlValid())
+	     	// if(!isUrlValid){
+	     		$('#error_url').css("display","none");
+	     		$.ajax({
+	                url: '/add_subscription/',
+	                type: 'POST',
+	                
+	                data: input_url,
+	                success: function(data){
+	                     if(data=='None'){
+	                     	console.log("error bro!! give some other url");
+	                     	$('#error_url').html('<div class="alert alert-danger">\
+	  							<strong>Url does not have any feeds</strong> </div>');
+	                     	$("#error_url").css("display", "block");
+	                     }
+	                     else{
+	                        console.log('coolstuff.I ll get you the things bob');
+	                        $('#closemodal').click();
+	                     }	
+	                     //add title in the begining
+	                     //display feeds    
+	                }
+	            });
+	     	// }
+	     	// else{
+	     	// 	$('#error_url').css("display","block");
+	     	// }
 		});	
     
   });
   </script>
-  
+  <script>
+  	$(document).ready(function(){
+    $(document).ajaxStart(function(){
+        $("#loadingmessage").css("display", "block");
+    });
+    $(document).ajaxComplete(function(){
+        $("#loadingmessage").css("display", "none");
+    });
+    // $("").click(function(){
+    //     $("#txt").load("demo_ajax_load.asp");
+    // });
+});
+  </script>
   
   <style>
   .feedlink{
@@ -81,10 +117,11 @@
 {% endblock header_part %}
 {% block body %}
 
-<div class="card" style="margin-top: 0px;min-height: 100%;">
+<!-- <div class="card" style="margin-top: 0px;min-height: 100%;"> -->
 	<div class="row" style="margin-right: 0%;">
 		<div class="col-md-3" style="margin-right:0%;padding-right: 0%;">
-			<div  style="background-color:#541e5e;height:100%;padding-top:0px;">
+			<div class="card" style="height:100%; background-color:#541e5e; ">
+			<div  style="background-color:#541e5e;height:;padding-top:0px;">
 			
 				<div id="accordion">
 					
@@ -137,22 +174,22 @@
 					    	</li>
 					    </ul>
 			  		</div>
-			  		<button type="button" style="width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>
-					<div>
-						
-					</div>
-				</div>
+			  </div>
+			  </div>
+			  	<button type="button" style="border-radius:0px;width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>	
 			
 			</div>
 		</div>
-		<div class="col-md-9" style="padding-right: 0%;margin-right:0%">
+		<div class="col-md-9" style="margin-left:0%;padding-left:0%;padding-right: 0%;margin-right:0%">
 		<div id="feed_details">
+		<div class="card">
 			<div class="title">
-
+				This is awesome
 			</div>
 			<div class="description">
-
+			description goes here
 			</div>
+		</div>
 		</div>
 		</div>
 	</div>
@@ -160,7 +197,7 @@
 	    <div class="modal-dialog" style="margin-top:70px;">
 	  		<div class="modal-content" style="text-align:center;">
 		        <div class="modal-header">
-		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          
 		          <h4 class="modal-title"><strong>Enter feed url</strong></h4>
 		        </div>
 	        <div class="modal-body" style="text-align:center;">
@@ -175,13 +212,22 @@
 
 				
 				
-					<button type="button" class="btn" style="background-color:#533259;" data-dismiss="modal">
+					<button type="button" class="btn" id="closemodal" style="background-color:#533259;" data-dismiss="modal">
 						<strong style="color:white;">Close</strong>
 					</button>
+					<br/>
+					<br/>
+					<div id='loadingmessage' style='display:none'>
+  						<img style="width:70px;height:auto;" src={% static 'progress.gif' %}/>
+					</div>
+					<div id="error_url">
+
+					</div>
+
 				</form>
 		    </div>
 		</div>
 	</div>
-</div>
+<!-- </div> -->
 
 {% endblock body %}

@@ -1,6 +1,7 @@
 import re
 import urllib2
 
+import rfc822
 class feed_parser:
     def __init__(self, url):
 
@@ -35,11 +36,14 @@ class feed_parser:
     def last_updated_on(self):
         response = self.response
         try:
-            last_updated_on = re.findall('<lastBuildDate>(.*?)</lastBuildDate>')[0]
+            last_updated_on = re.findall('<lastBuildDate>(.*?)</lastBuildDate>', response,re.DOTALL)[0]
+            s = rfc822.parsedate_tz(last_updated_on)
+            last_updated_on = '%s-%s-%s %s:%s:%s'%(s[0:6])
         except:
             last_updated_on = ''
+        #print last_updated_on
         return last_updated_on
-
+        
 
     def feed_details(self):
         
@@ -71,6 +75,9 @@ class feed_parser:
             #published timestamp
             try:
                 published_on = re.findall(r'<pubDate>(.*?)</pubDate>', item)[0]
+                s = rfc822.parsedate_tz(published_on)
+                published_on = '%s-%s-%s %s:%s:%s'%(s[0:6])
+              
             except:
                 published_on = ''
                 pass
