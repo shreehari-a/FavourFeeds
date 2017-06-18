@@ -6,7 +6,7 @@
   <script>
      $(function() {
     	//$( "#accordion" ).accordion();
-    	$("#accordion").accordion({ header: "button", collapsible: true, active: false });
+    	$("#accordion").accordion({ header: "button", collapsible: true, active: true });
     	
      // var obj = JSON.parse('{{ feed|safe }}');
      // console.log(obj);
@@ -19,32 +19,7 @@
      $('#closemodal').click(function(){
      	$("#error_url").css("display", "none");
      });
-     $('.close').click(function(){
-     	if(!confirm('Are you sure? Feed will be removed!')){
-     		return false;
-     	}
-     	else{
-     		//remove feed_url from users list('from linking table User_FeedWebsite')
-     		console.log('remove feeds');
-     		//once removed delete the div item
-     	}
-     });
-     $('.feedlink').click(function(){
-     		console.log('parse feed for link from database');
-     		var link = $(this).attr('data')
-     		url = JSON.stringify(link)
-     		console.log(link);
-
-     		//do ajax
-     		$.get('/feed_details/', { "url" : url }, function(data){
-                        console.log("yes got the info bro!");
-                        console.log(data);
-                        });
-     		//parse new feeds
-
-     		//display them -  innerHTML
-
-     })
+     
      //Add New Feed
      $('#add_new_feeds').click(function(e){
      		e.preventDefault(e);
@@ -68,38 +43,48 @@
 
 	                     else{
 	                        console.log('coolstuff.I ll get you the things bob');
-	                        console.log(data);
+	                        // console.log(data);
 	                        $('#closemodal').click();
-	                     }	
+	                     
 	                     //add title in the begining
+	                     		
+		                     item = JSON.parse(data);
+		                     feed_details = item[0];
+		                     // console.log(feed_details);
+		                     website_details = item[1];
+		                     // console.log(website_details)
+		                     // console.log(feed_details.length);
+		                     $('#feed_details').html('');
+		                     for(item=0;item<feed_details.length;item++){
+		                     	// console.log(feed_details[item]);
+		                     	
+		                     	feed_link = feed_details[item]["feed_link"];
+		                     	published_on = feed_details[item]['published_on'];
+		                     	title = feed_details[item]['title'];
+		                     	description = feed_details[item]['description'];
+		                     	text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
+		                     	// console.log(text);
+		                     	// $('#website_titles')
+		                        $('#feed_details').append(text);
+		                     }
+		                     console.log(website_details);
+		                     website_title = website_details['website_title'];
+		                     website_feed_url = website_details['website_feed_url'];
+
+		                     text = '<li><a href="#" class="feedlink" data="'+website_feed_url+'">'+website_title+'</a><button type="button" class="close" data="'+website_title+'">&times;</button></li>';
+		                     console.log(text);
+		                     $('#website_titles').append(text);
+		                  }
 	                     //display feeds    
 	                }
 	            });
 	     	
 		});	
-     	//display_onload
-     	var data = JSON.parse('{{ website|safe }}');
-     	
-       	for(item=0;item<2;item++){
-       		title = data[item][0].website_title;
-       		url = data[item][0].website_feed_url;
-       		
-
-       		$("#website_titles").append('<li><a href="#" class="feedlink" data="'+url+'">'+title+'</a><button type="button" class="close" data="'+url+'">&times;</button></li>');
-       	}
-       	var desc = JSON.stringify('{{ data|safe }}');
-       	var desc_string = JSON.parse(desc);
-       	var lol = JSON.parse(desc_string);
-       	console.log(desc);
-       	console.log(desc_string);
-
-       	
-
     
   });
   </script>
   <script>
-
+//After the documeny is ready.
  //loading gif
 $(document).ready(function(){
     $(document).ajaxStart(function(){
@@ -115,9 +100,51 @@ $(document).ready(function(){
      	else{
      		//remove feed_url from users list('from linking table User_FeedWebsite')
      		console.log('remove feeds');
+     		url = $(this).attr('data');
+
+     		$.get('/delete_subscription/',{"url":url}, function(data) {
+     			if(data='Deleted'){
+     				console.log(data);
+     				$(this).remove();
+     			}
+     		});
      		//once removed delete the div item
      	}
      });
+    $('.feedlink').click(function(event){
+     		console.log('parse feed for link from database');
+     		var link = $(this).attr('data');
+     		url = JSON.stringify(link);
+     		console.log(link);
+
+     		//do ajax
+     		$.get('/feed_details/', { "url" : url }, function(data){
+                        console.log("yes got the info bro!");
+                        
+                        // var data = JSON.parse(data);
+                        // console.log(data[]);
+                         $('#feed_details').html('');
+                         feed_details = JSON.parse(data);
+                         // console.log(feed_details);
+                         for(item=0;item<feed_details.length;item++){
+		                     	// console.log(feed_details[item]);
+		                     	
+		                     	feed_link = feed_details[item]["feed_link"];
+		                     	published_on = feed_details[item]['published_on'];
+		                     	title = feed_details[item]['title'];
+		                     	description = feed_details[item]['description'];
+		                     	text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
+		                     	// console.log(text);
+		                     	// $('#website_titles')
+		                        $('#feed_details').append(text);
+		                     }
+
+                        });
+     		//parse new feeds
+
+     		//display them -  innerHTML
+
+     })	
 });
   </script>
   
@@ -159,8 +186,16 @@ $(document).ready(function(){
 				  	</button>
 				  	<div style="margin-top:5%;">
 					    <ul style="padding-left: 10%;padding-bottom: 10%;">
-					    <div id="website_titles">
-					    	
+					    <div id="website_titles" style="color: white;">
+					    
+					    {% for item in website %}
+					    	<li>
+					    		<a href="#" class="feedlink" data="{{ item.website_feed_url }}">{{item.website_title}}</a>
+					    		<button type="button" class="close" data="{{item.website_feed_url}}">
+					    			&times;
+					    	</button>
+					    	</li>
+					    {% endfor %}
 					    </div>
 					    </ul>
 					</div>
@@ -174,13 +209,17 @@ $(document).ready(function(){
 		</div>
 		<div class="col-md-9" style="margin-left:0%;padding-left:0%;padding-right: 0%;margin-right:0%">
 		<div id="feed_details">
-		<div class="card">
+		<div class="card"> 
+		{% for item in data %}
 			<div class="title">
-				This is awesome
+				<span><a href="{{item.feed_link}}">{{item.title}}</a><h4>{{ item.published_on }}</h4></span>
 			</div>
-			<div class="description">
-				
+			<div class="description">	
+				{{ item.description|safe }}
 			</div>
+			<br/>
+			<br/>
+		{% endfor %}
 		</div>
 		</div>
 		</div>

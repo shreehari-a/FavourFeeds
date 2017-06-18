@@ -10,6 +10,9 @@ from django.urls import reverse
 import json
 import feedfinder
 from feedly import feed_parser
+import HTMLParser
+
+
 
 def feed_id_identifier(url):
     obj = FeedWebsite.objects.filter()
@@ -35,16 +38,22 @@ def checking_subscription(user_id,feed_id):
 
 def get_feeds(feed_id):
     obj = FeedDetail.objects.filter().order_by('published_on')
-    data = {}
+    
     all_feeds = []
     for item in obj:
+        data = {}
         if feed_id == item.feed_id_id:
+            print
+            print
+            print "feed_id_input", feed_id, "   db",item.feed_id_id, "  title  ", item.title
             data['title'] = item.title
-            data['description'] = item.description
+            html_parser = HTMLParser.HTMLParser()
+            unescaped = html_parser.unescape(item.description)
+            data['description'] = unescaped
             data['feed_link'] = item.feed_link
             text = str(localtime(item.published_on))
             data['published_on'] = text
-        all_feeds.append(data)
+            all_feeds.append(data)
     return all_feeds
 
 def check_subscribed_feed_ids(user):
@@ -64,22 +73,39 @@ def check_subscribed_website(feed_id):
             data['website_feed_url'] = item.website_feed_url
             data['website_title'] = item.website_title
             data['website_url'] = item.website_url
-        website_data.append(data)
-    return website_data
+            website_data.append(data)
+    return website_data[0]
 
 
 def login(request):
     if request.user.is_authenticated:
         user = request.user
         feed_ids = check_subscribed_feed_ids(user)
-        
+        print
+        print
+        print feed_ids
+        print
+        print
         website_data = []
         for feed_id in feed_ids:
             website_data.append(check_subscribed_website(feed_id))
-        website_data = json.dumps(website_data)
-        first_fly_data = json.dumps(get_feeds(feed_ids[0]))
+        print
+        print
+        print website_data 
+        print
+        print
+        print
 
-        return render(request,'feeds.html',{ 'data': first_fly_data,'website':website_data})
+        print feed_ids[0]
+        print
+        print
+        # website_data = json.dumps(website_data)
+        first_fly_data = get_feeds(feed_ids[0])
+        for item in first_fly_data:
+            print
+            print  item
+            print
+        return render(request,'feeds.html',{ 'data': first_fly_data ,'website':website_data})
 
     return render(request,'login.html')
 
@@ -164,9 +190,11 @@ def add_subscription(request):
                 #check whether user has subscribed
                 feed_id = feed_id_identifier(url_data)
                 is_subscribed = checking_subscription(request.user,feed_id)
-                
+                print is_subscribed
                 if is_subscribed == "yes":
-                    pass
+                    print "hello"
+                    print "hello"
+                    HttpResponse('None');
                 else:
                     User_FeedWebsite_Obj = User_FeedWebsite()
                     User_FeedWebsite_Obj.user_id = request.user
@@ -177,8 +205,8 @@ def add_subscription(request):
             #get the feeds and return
             feed_id = feed_id_identifier(url_data)
             allfeeds = get_feeds(feed_id)
-            
-            flying_data = json.dumps(allfeeds)
+            website_data = check_subscribed_website(feed_id)
+            flying_data = json.dumps([allfeeds,website_data])
             return HttpResponse(flying_data)
                     #add user to the User_FeedWebsite table
                     #get website title
@@ -216,3 +244,14 @@ def feed_details(request):
         flying_data = json.dumps(all_feeds)
         return HttpResponse(flying_data)
 
+def delete_user_subscription(feed_id,user):
+    User_FeedWebsite.objects.filter(feed_id_id=feed_id, user_id=user).delete()
+
+def delete_subscription(request):
+    if request.method == 'GET':
+        url_data = str(request.GET['url'])
+    
+        print url_data
+        feed_id = feed_id_identifier(url_data)
+        delete_user_subscription(feed_id, request.user)
+        return HttpResponse('Deleted')
