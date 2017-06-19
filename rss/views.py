@@ -37,7 +37,7 @@ def checking_subscription(user_id,feed_id):
 
 
 def get_feeds(feed_id):
-    obj = FeedDetail.objects.filter().order_by('published_on')
+    obj = FeedDetail.objects.filter().order_by('-published_on')
     
     all_feeds = []
     for item in obj:
@@ -51,7 +51,10 @@ def get_feeds(feed_id):
             unescaped = html_parser.unescape(item.description)
             data['description'] = unescaped
             data['feed_link'] = item.feed_link
-            text = str(localtime(item.published_on))
+            try:
+                text = str(localtime(item.published_on))
+            except:
+                text = ''
             data['published_on'] = text
             all_feeds.append(data)
     return all_feeds
@@ -65,7 +68,7 @@ def check_subscribed_feed_ids(user):
     return feed_ids
 
 def check_subscribed_website(feed_id):
-    obj = FeedWebsite.objects.filter()
+    obj = FeedWebsite.objects.filter().order_by('-last_updated_on')
     data = {}
     website_data=[]
     for item in obj:
@@ -87,6 +90,7 @@ def login(request):
         print
         print
         website_data = []
+        first_fly_data = {}
         for feed_id in feed_ids:
             website_data.append(check_subscribed_website(feed_id))
         print
@@ -95,17 +99,17 @@ def login(request):
         print
         print
         print
-
-        print feed_ids[0]
-        print
-        print
-        # website_data = json.dumps(website_data)
-        first_fly_data = get_feeds(feed_ids[0])
-        for item in first_fly_data:
+        try:
+            first_fly_data = get_feeds(feed_ids[0])
             print
-            print  item
             print
+            print first_fly_data
+            print
+            print
+        except:
+            pass
         return render(request,'feeds.html',{ 'data': first_fly_data ,'website':website_data})
+        
 
     return render(request,'login.html')
 

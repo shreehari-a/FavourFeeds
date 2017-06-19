@@ -1,6 +1,6 @@
 <html>
 {% block django_loading %}
-
+	{% load static %}
 {% endblock django_loading %}
 <head>
 		<title>FavourFeeds.com</title>
@@ -15,6 +15,10 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<link rel="stylesheet" href="{% static 'tiny_scroll.css' %}">
+		
+		<script src="{% static 'jquery.timeago.js' %}"></script>
+
 		<!--<link rel="stylesheet" href="https://colorlib.com/polygon/build/css/custom.min.css">
 		<link rel="stylesheet" href="https://colorlib.com/polygon/vendors/iCheck/skins/flat/green.css">
 		<link rel="stylesheet" href="https://colorlib.com/polygon/vendors/jqvmap/dist/jqvmap.min.css">
@@ -25,8 +29,7 @@
 				font-weight: 900px;
 			}
 			#navigation-fixed{
-			left:8.15%;
-			right:8.8%;
+			
 			position:fixed;
 			
 			background-color:#3d1644;
@@ -49,7 +52,7 @@
 		{% endblock header_part %}
 </head>
 
-<div class="container" style="margin-left:7%;">
+<!-- <div class="container" style="margin-left:7%;"> -->
 	<nav class="navbar navbar-fixed-top" id="navigation-fixed">
 		<div class="container-fluid">
 			
@@ -76,7 +79,7 @@
 	{% block body %}
 	{% endblock body %}
 	</body>
-</div>
+<!-- </div> -->
 	
 
 </html>

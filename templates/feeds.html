@@ -8,14 +8,7 @@
     	//$( "#accordion" ).accordion();
     	$("#accordion").accordion({ header: "button", collapsible: true, active: true });
     	
-     // var obj = JSON.parse('{{ feed|safe }}');
-     // console.log(obj);
-     // console.log(obj.title);
-     // console.log(obj.description);
-     // var x = document.getElementsByClassName("title")
-     // x[0].innerHTML = obj.title;
-     // var y = document.getElementsByClassName("description")
-     // y[0].innerHTML = obj.description;
+  
      $('#closemodal').click(function(){
      	$("#error_url").css("display", "none");
      });
@@ -62,7 +55,8 @@
 		                     	published_on = feed_details[item]['published_on'];
 		                     	title = feed_details[item]['title'];
 		                     	description = feed_details[item]['description'];
-		                     	text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
+		                     	// text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
+		                     	text = '<div class="panel panel-warning"><div class="panel-heading"><span><a class="direct_link" href="'+feed_link+'">'+title+'</a><i class="time" style="text-align: right" data="'+published_on+'">'+published_on+'</i></span></div><div class="panel-body desc"><h4>'+description+'</h4></div></div>'
 		                     	// console.log(text);
 		                     	// $('#website_titles')
 		                        $('#feed_details').append(text);
@@ -71,7 +65,7 @@
 		                     website_title = website_details['website_title'];
 		                     website_feed_url = website_details['website_feed_url'];
 
-		                     text = '<li><a href="#" class="feedlink" data="'+website_feed_url+'">'+website_title+'</a><button type="button" class="close" data="'+website_title+'">&times;</button></li>';
+		                     text = '<li><a class="feedlink" data="'+website_feed_url+'">'+website_title+'</a><button type="button" class="close" data="'+website_title+'">&times;</button></li>';
 		                     console.log(text);
 		                     $('#website_titles').append(text);
 		                  }
@@ -105,7 +99,7 @@ $(document).ready(function(){
      		$.get('/delete_subscription/',{"url":url}, function(data) {
      			if(data='Deleted'){
      				console.log(data);
-     				$(this).remove();
+     				window.location = '/';
      			}
      		});
      		//once removed delete the div item
@@ -116,7 +110,7 @@ $(document).ready(function(){
      		var link = $(this).attr('data');
      		url = JSON.stringify(link);
      		console.log(link);
-
+     		// window.location = '/'
      		//do ajax
      		$.get('/feed_details/', { "url" : url }, function(data){
                         console.log("yes got the info bro!");
@@ -133,18 +127,38 @@ $(document).ready(function(){
 		                     	published_on = feed_details[item]['published_on'];
 		                     	title = feed_details[item]['title'];
 		                     	description = feed_details[item]['description'];
-		                     	text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
-		                     	// console.log(text);
+		                     	// text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
+		                     	text = '<div class="panel panel-warning"><div class="panel-heading"><span><a class="direct_link" href="'+feed_link+'">'+title+'</a><i class="time" style="text-align: right" data="'+published_on+'">'+published_on+'</i></span></div><div class="panel-body desc"><h4>'+description+'</h4></div></div>'
+		                     	console.log(text);
 		                     	// $('#website_titles')
 		                        $('#feed_details').append(text);
+		                        
+		                        // console.log(text)
 		                     }
-
+		                  $(".time").each(function(){
+						    	// console.log('hello');
+						    	
+						    	time_el=$(this);
+						    	console.log(time_el);
+						    	statement = $.timeago(time_el.text());
+						    	time_el.html(statement);
+						    });
+		                 
                         });
      		//parse new feeds
 
      		//display them -  innerHTML
 
-     })	
+     });
+    $(".time").each(function(){
+    	// console.log('hello');
+    	
+    	time_el=$(this);
+    	console.log(time_el);
+    	statement = $.timeago(time_el.text());
+    	time_el.html(statement);
+    });
+    
 });
   </script>
   
@@ -166,15 +180,39 @@ $(document).ready(function(){
   .close:hover{
   	 color: red;
   }
+  .desc{
+  	font-size: 15px !important;
+  }
+  .time{
+  	float: right;
+  }
+  .direct_link{
+  	font-size: 20px;
+  }
+  #link_panel{
+  	position:fixed;margin-right:0%;padding-right: 0%;height:92%;width:25%;
+  }
+  #link_card{
+  height:91%; background-color:#541e5e; 
+  }
+  #random_thing{
+  background-color:#541e5e;height:;padding-top:0px;
+  }
+  #description_panel{
+  height:91%;margin-left:25%;padding-left:0%;padding-right: 0%;margin-right:0%
+  }
+  #time{
+  text-align:right;
+  }
   </style>
 {% endblock header_part %}
 {% block body %}
 
 <!-- <div class="card" style="margin-top: 0px;min-height: 100%;"> -->
 	<div class="row" style="margin-right: 0%;">
-		<div class="col-md-3" style="margin-right:0%;padding-right: 0%;">
-			<div class="card" style="height:91%; background-color:#541e5e; ">
-			<div  style="background-color:#541e5e;height:;padding-top:0px;">
+		<div class="col-md-3" id="link_panel">
+			<div class="card" id="link_card">
+			<div id="random_thing">
 			
 				<div id="accordion">
 					
@@ -187,15 +225,18 @@ $(document).ready(function(){
 				  	<div style="margin-top:5%;">
 					    <ul style="padding-left: 10%;padding-bottom: 10%;">
 					    <div id="website_titles" style="color: white;">
-					    
+					     
 					    {% for item in website %}
+					   
 					    	<li>
-					    		<a href="#" class="feedlink" data="{{ item.website_feed_url }}">{{item.website_title}}</a>
+					    		<a class="feedlink" data="{{ item.website_feed_url }}">{{item.website_title}}</a>
 					    		<button type="button" class="close" data="{{item.website_feed_url}}">
 					    			&times;
 					    	</button>
 					    	</li>
+
 					    {% endfor %}
+					    
 					    </div>
 					    </ul>
 					</div>
@@ -207,19 +248,28 @@ $(document).ready(function(){
 			<button type="button" style="border-radius:0px;width:100%;background-color:#533259;" class="btn" data-toggle="modal" data-target="#myModal"><strong style="color:white;font-size: 25px;">Add New Feed</strong></button>	
 			
 		</div>
-		<div class="col-md-9" style="margin-left:0%;padding-left:0%;padding-right: 0%;margin-right:0%">
+		<div class="col-md-9" id="description_panel">
 		<div id="feed_details">
 		<div class="card"> 
-		{% for item in data %}
+		
+		<!-- 
+			
 			<div class="title">
-				<span><a href="{{item.feed_link}}">{{item.title}}</a><h4>{{ item.published_on }}</h4></span>
+				<span><h4></h4></span>
 			</div>
 			<div class="description">	
-				{{ item.description|safe }}
+				
 			</div>
-			<br/>
-			<br/>
-		{% endfor %}
+			
+		 -->
+				{% for item in data %}
+				<div class="panel panel-warning">
+				    <div class="panel-heading">
+				    	<span><a class="direct_link" href="{{item.feed_link}}">{{item.title}}</a></span><span<time class="time" style="text-align: right;" data="{{ item.published_on }}">{{ item.published_on }}</time></span></div>
+				    <div class="panel-body desc"><h4>{{ item.description|safe }}</h4></div>
+				</div>
+				{% endfor %}
+			
 		</div>
 		</div>
 		</div>

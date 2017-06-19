@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rss',
+    'django_cron',
 
     'django.contrib.sites',
 
