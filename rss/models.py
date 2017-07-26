@@ -17,8 +17,8 @@ class FeedWebsite(models.Model):
 	website_title = models.TextField(null=True)
    	last_updated_on = models.DateTimeField(null=True, blank=True, auto_now_add=False, default=None)
 
-   	def __unicode__(self):
-   		return str(self.feed_id) +' - '+str(self.website_title)
+   	# def __unicode__(self):
+   	# 	return str(self.feed_id) +' - '+str(self.website_title)
 
 class FeedDetail(models.Model):
 	feed_id = models.ForeignKey(FeedWebsite, related_name='feedW_feedD', null=True, on_delete=models.CASCADE)
@@ -27,9 +27,9 @@ class FeedDetail(models.Model):
 	feed_link = models.URLField(null=True, max_length=300)
 	published_on = models.DateTimeField(null=True, blank=True, auto_now_add=False, default=None)
 
-	def __unicode__(self):
-		return str(self.feed_id)+' - '+str(self.feed_link)
-
+	# def __unicode__(self):
+		 # return str(self.feed_id)+' - '+str(self.feed_link)
+		 # return str(self.feed_id)
 class User_FeedWebsite(models.Model):
 	user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	feed_id = models.ForeignKey(FeedWebsite, on_delete=models.CASCADE, null=True)

@@ -20,56 +20,56 @@
 			var input_url = $('#feedurls').serialize();
      		console.log(input_url);
      		
-	     		$('#error_url').css("display","none");
-	     		$.ajax({
-	                url: '/add_subscription/',
-	                type: 'POST',
-	                
-	                data: input_url,
-	                success: function(data){
-	                     if(data=='None'){
-	                     	console.log("error bro!! give some other url");
-	                     	$('#error_url').html('<div class="alert alert-danger">\
-	  							<strong>Url does not have any feeds</strong> </div>');
-	                     	$("#error_url").css("display", "block");
-	                     }
+	 		$('#error_url').css("display","none");
+	 		$.ajax({
+	            url: '/add_subscription/',
+	            type: 'POST',
+	            
+	            data: input_url,
+	            success: function(data){
+                 if(data=='None'){
+                 	console.log("error bro!! give some other url");
+                 	$('#error_url').html('<div class="alert alert-danger">\
+							<strong>Url does not have any feeds</strong> </div>');
+                 	$("#error_url").css("display", "block");
+                 }
 
-	                     else{
-	                        console.log('coolstuff.I ll get you the things bob');
-	                        // console.log(data);
-	                        $('#closemodal').click();
-	                     
-	                     //add title in the begining
-	                     		
-		                     item = JSON.parse(data);
-		                     feed_details = item[0];
-		                     // console.log(feed_details);
-		                     website_details = item[1];
-		                     // console.log(website_details)
-		                     // console.log(feed_details.length);
-		                     $('#feed_details').html('');
-		                     for(item=0;item<feed_details.length;item++){
-		                     	// console.log(feed_details[item]);
-		                     	
-		                     	feed_link = feed_details[item]["feed_link"];
-		                     	published_on = feed_details[item]['published_on'];
-		                     	title = feed_details[item]['title'];
-		                     	description = feed_details[item]['description'];
-		                     	// text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
-		                     	text = '<div class="panel panel-warning"><div class="panel-heading"><span><a class="direct_link" href="'+feed_link+'">'+title+'</a><i class="time" style="text-align: right" data="'+published_on+'">'+published_on+'</i></span></div><div class="panel-body desc"><h4>'+description+'</h4></div></div>'
-		                     	// console.log(text);
-		                     	// $('#website_titles')
-		                        $('#feed_details').append(text);
-		                     }
-		                     console.log(website_details);
-		                     website_title = website_details['website_title'];
-		                     website_feed_url = website_details['website_feed_url'];
+                 else{
+                    console.log('coolstuff.I ll get you the things bob');
+                    // console.log(data);
+                    $('#closemodal').click();
+                 
+                 //add title in the begining
+                 		
+                     item = JSON.parse(data);
+                     feed_details = item[0];
+                     // console.log(feed_details);
+                     website_details = item[1];
+                     // console.log(website_details)
+                     // console.log(feed_details.length);
+                     $('#feed_details').html('');
+                     for(item=0;item<feed_details.length;item++){
+                     	// console.log(feed_details[item]);
+                     	
+                     	feed_link = feed_details[item]["feed_link"];
+                     	published_on = feed_details[item]['published_on'];
+                     	title = feed_details[item]['title'];
+                     	description = feed_details[item]['description'];
+                     	// text = '<div class="title"><span><a href="'+feed_link+'">'+title+'</a><h4>'+published_on+'</h4></span></div><div class="description">'+description+'</div>';
+                     	text = '<div class="panel panel-warning"><div class="panel-heading"><span><a class="direct_link" href="'+feed_link+'">'+title+'</a><i class="time" style="text-align: right" data="'+published_on+'">'+published_on+'</i></span></div><div class="panel-body desc"><h4>'+description+'</h4></div></div>'
+                     	// console.log(text);
+                     	// $('#website_titles')
+                        $('#feed_details').append(text);
+                     }
+                     console.log(website_details);
+                     website_title = website_details['website_title'];
+                     website_feed_url = website_details['website_feed_url'];
 
-		                     text = '<li><a class="feedlink" data="'+website_feed_url+'">'+website_title+'</a><button type="button" class="close" data="'+website_title+'">&times;</button></li>';
-		                     console.log(text);
-		                     $('#website_titles').append(text);
-		                  }
-	                     //display feeds    
+                     text = '<li><a class="feedlink" data="'+website_feed_url+'">'+website_title+'</a><button type="button" class="close" data="'+website_title+'">&times;</button></li>';
+                     console.log(text);
+                     $('#website_titles').append(text);
+                  }
+	                 //display feeds    
 	                }
 	            });
 	     	
@@ -105,6 +105,8 @@ $(document).ready(function(){
      		//once removed delete the div item
      	}
      });
+
+    //dashboard links
     $('.feedlink').click(function(event){
      		console.log('parse feed for link from database');
      		var link = $(this).attr('data');
@@ -144,12 +146,13 @@ $(document).ready(function(){
 						    	time_el.html(statement);
 						    });
 		                 
-                        });
+                        }); 
      		//parse new feeds
 
      		//display them -  innerHTML
 
      });
+    //blah times ago
     $(".time").each(function(){
     	// console.log('hello');
     	
@@ -283,29 +286,29 @@ $(document).ready(function(){
 		        </div>
 	        <div class="modal-body" style="text-align:center;">
 	        	<form id="feedurls" method="POST" enctype="multipart/form-data">
-	        		<!-- {% csrf_token %} -->
+	        		
 		      		<input id="feed_url" name="url" value="" type="text" style="width:80%;text-align:center;color:black;" placeholder="feed url"></input>
 		      		{% csrf_token %}
-					<br/><br/>
-					<button type="submit" id="add_new_feeds" style="background-color:#533259;" 	class="btn">
-					<strong style="color:white;">Add to my feeds</strong>
-					</button>
+    					<br/><br/>
+    					<button type="submit" id="add_new_feeds" style="background-color:#533259;" 	class="btn">
+    					<strong style="color:white;">Add to my feeds</strong>
+    					</button>
 
-				
-				
-					<button type="button" class="btn" id="closemodal" style="background-color:#533259;" data-dismiss="modal">
-						<strong style="color:white;">Close</strong>
-					</button>
-					<br/>
-					<br/>
-					<div id='loadingmessage' style='display:none'>
-  						<img style="width:70px;height:auto;" src={% static 'progress.gif' %}/>
-					</div>
-					<div id="error_url">
+    				
+    				
+    					<button type="button" class="btn" id="closemodal" style="background-color:#533259;" data-dismiss="modal">
+    						<strong style="color:white;">Close</strong>
+    					</button>
+    					<br/>
+    					<br/>
+    					<div id='loadingmessage' style='display:none'>
+      						<img style="width:70px;height:auto;" src={% static 'progress.gif' %}/>
+    					</div>
+    					<div id="error_url">
 
-					</div>
+    					</div>
 
-				</form>
+    				</form>
 		    </div>
 		</div>
 	</div>

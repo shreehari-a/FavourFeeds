@@ -61,7 +61,11 @@ class feed_parser:
             except:
                 title= ''
                 pass
-
+            print
+            print
+            print title
+            print
+            print
             #link for the feed
             try:
                 feed_link  = re.sub('[\s\S]*<link>','', item)

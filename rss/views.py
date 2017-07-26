@@ -47,7 +47,7 @@ def get_feeds(feed_id):
             print
             print "feed_id_input", feed_id, "   db",item.feed_id_id, "  title  ", item.title
             data['title'] = item.title
-            html_parser = HTMLParser.HTMLParser()
+            html_parser = HTMLParser.HTMLParser() 
             unescaped = html_parser.unescape(item.description)
             data['description'] = unescaped
             data['feed_link'] = item.feed_link
@@ -238,6 +238,13 @@ def login_cancelled(request):
 #get if user_id matches the 
 
 def feed_details(request):
+    print
+    print
+    print 
+    print "hello"
+    print
+    print
+    print
     if request.method == 'GET':
         url_data = str(request.GET['url'])
         url_data = json.loads(url_data)

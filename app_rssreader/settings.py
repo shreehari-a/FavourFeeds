@@ -25,7 +25,7 @@ SECRET_KEY = '5(whsx145zq7-9$l8dns0=yplej1ir7fcu#q!a+haba##+^or^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 # Application definition
 
@@ -191,3 +191,12 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 
 ACCOUNT_LOGOUT_REDIRECT_URL ="/"
+
+
+CRON_CLASSES = (
+"rss.job.FeedCronJob",
+)
+
+DJANGO_CRON_LOCK_BACKEND = [
+                           'django_cron.backends.lock.cache.CacheLock', 
+                           ]

@@ -16,5 +16,5 @@ steps:
 
     4. show feeds to user
    
-    5. keep updating feed for the urls in db each 10mins 
+    5. keep updating feed for the urls in db each 5mins 
 
